@@ -1,0 +1,22 @@
+PODS:
+  - Flutter (1.0.0)
+  - sideossdk (0.0.1):
+    - Flutter
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - sideossdk (from `.symlinks/plugins/sideossdk/ios`)
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  sideossdk:
+    :path: ".symlinks/plugins/sideossdk/ios"
+
+SPEC CHECKSUMS:
+  Flutter: 50d75fe2f02b26cc09d224853bb45737f8b3214a
+  sideossdk: 856df148467eef636936923e2c32d4d2b606cdfd
+
+PODFILE CHECKSUM: aafe91acc616949ddb318b77800a7f51bffa2a4c
+
+COCOAPODS: 1.11.3
