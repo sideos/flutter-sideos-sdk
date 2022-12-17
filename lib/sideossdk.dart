@@ -1,4 +1,6 @@
 import 'sideossdk_platform_interface.dart';
+export 'verifiable_credential.dart' show VerifiableCredential;
+export 'sideos_response.dart' show SideosResponse;
 
 class Sideossdk {
   static Future<Sideossdk> create() async {

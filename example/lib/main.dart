@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -33,21 +35,23 @@ class _MyAppState extends State<MyApp> {
     try {
       var value = sideossdkPlugin.signVC(
           "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}");
+      var r = SideosResponse.fromJsonString(value);
+      if (r.error) {
+        print("Error...");
+      } else {
+        print(r.message);
+      }
+      value = sideossdkPlugin.verifyVC(
+          "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}",
+          "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOnsiaWQiOiJkaWQ6a2V5OlYwMDM6ejZNa25kTU5MdUJvcXdRTThpWnBIQnZTUXhGNW50OUJ3VzlYdnBnd0hva1JDTjdWIn19.T4EwOojjDK4rJ0KMfxt_OHeNf3BNFEoChmHXsiKCTtP2JSTImIJ9RDb8djgIBqybzl3XQQBkj-mSqTKqUwPUDg");
       print(value);
-      /*var p1 = _sideossdkPlugin.initSDK();
-      p1.then((value) {
-        print(value);
-        value = _sideossdkPlugin.signVC(
-            "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}");
-        print(value);
-        value = _sideossdkPlugin.verifyVC(
-            "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}",
-            "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOnsiaWQiOiJkaWQ6a2V5OlYwMDM6ejZNa25kTU5MdUJvcXdRTThpWnBIQnZTUXhGNW50OUJ3VzlYdnBnd0hva1JDTjdWIn19.T4EwOojjDK4rJ0KMfxt_OHeNf3BNFEoChmHXsiKCTtP2JSTImIJ9RDb8djgIBqybzl3XQQBkj-mSqTKqUwPUDg");
-        print(value);
-        value = _sideossdkPlugin.getVerifiableCredentials();
-        print(value);
-      });
-*/
+      value = sideossdkPlugin.getVerifiableCredentials();
+      print(value);
+      var credential = VerifiableCredential("", "{}", "SidedosEmail");
+      var str = jsonEncode(credential);
+      value = sideossdkPlugin.saveVerifiableCredential(str, "SideosEmail");
+      print(value);
+
       //platformVersion = _sideossdkPlugin.getSharedKeyPair();
       //platformVersion = _sideossdkPlugin.getKeys();
       platformVersion = 'PP';
