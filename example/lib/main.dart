@@ -31,8 +31,23 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
+      var p1 = _sideossdkPlugin.initSDK();
+      p1.then((value) {
+        print(value);
+        value = _sideossdkPlugin.signVC(
+            "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}");
+        print(value);
+        value = _sideossdkPlugin.verifyVC(
+            "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}",
+            "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9.eyJpc3N1ZXIiOnsiaWQiOiJkaWQ6a2V5OlYwMDM6ejZNa25kTU5MdUJvcXdRTThpWnBIQnZTUXhGNW50OUJ3VzlYdnBnd0hva1JDTjdWIn19.T4EwOojjDK4rJ0KMfxt_OHeNf3BNFEoChmHXsiKCTtP2JSTImIJ9RDb8djgIBqybzl3XQQBkj-mSqTKqUwPUDg");
+        print(value);
+        value = _sideossdkPlugin.getVerifiableCredentials();
+        print(value);
+      });
+
       //platformVersion = _sideossdkPlugin.getSharedKeyPair();
-      platformVersion = _sideossdkPlugin.getLocalDid("V003");
+      //platformVersion = _sideossdkPlugin.getKeys();
+      platformVersion = 'PP';
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }

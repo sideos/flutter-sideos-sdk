@@ -1,6 +1,7 @@
 import 'dart:ffi';
 import 'dart:io';
 import 'package:ffi/ffi.dart';
+import 'package:path_provider/path_provider.dart';
 
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 
@@ -14,7 +15,8 @@ typedef SharedKeypairFunction = Pointer<Utf8> Function();
 typedef SharedKeypairFunctionDart = Pointer<Utf8> Function();
 typedef SharedStringFunction = Pointer<Utf8> Function(Pointer<Utf8>);
 typedef SharedStringFunctionDart = Pointer<Utf8> Function(Pointer<Utf8>);
-
+typedef SharedStringStringFunctionDart = Pointer<Utf8> Function(
+    Pointer<Utf8>, Pointer<Utf8>);
 typedef CStringFree = void Function(Pointer<Utf8>);
 typedef CStringFreeFFI = Void Function(Pointer<Utf8>);
 
@@ -27,7 +29,7 @@ abstract class SideossdkPlatform extends PlatformInterface {
   SideossdkPlatform() : super(token: _token);
 
   static final Object _token = Object();
-
+  static String _path = "";
   static SideossdkPlatform _instance = MethodChannelSideossdk();
 
   /// The default instance of [SideossdkPlatform] to use.
@@ -43,8 +45,15 @@ abstract class SideossdkPlatform extends PlatformInterface {
     _instance = instance;
   }
 
-  Future<String?> getPlatformVersion() {
-    throw UnimplementedError('platformVersion() has not been implemented.');
+  Future<String> getLocalFile() async {
+    final directory = await getApplicationDocumentsDirectory();
+    var path = directory.path;
+    return '$path/ssidb.sqlite';
+  }
+
+  Future<String?> initSDK() async {
+    _path = await getLocalFile();
+    return _instance.initialize();
   }
 
   String getLocalDid(String version) {
@@ -52,6 +61,54 @@ abstract class SideossdkPlatform extends PlatformInterface {
         .lookup<NativeFunction<SharedStringFunction>>('get_local_did')
         .asFunction();
     var ptr = result(version.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String createLocalDid(String version) {
+    final SharedStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunction>>('create_keys')
+        .asFunction();
+    var ptr = result(version.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String setKeys(String keys) {
+    final SharedStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunction>>('set_keys')
+        .asFunction();
+    var ptr = result(keys.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String signVC(String vc) {
+    final SharedStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunction>>('rust_signVC')
+        .asFunction();
+    var ptr = result(vc.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String verifyVC(String vc, String signature) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>('rust_verifyVC')
+        .asFunction();
+    var ptr = result(vc.toNativeUtf8(), signature.toNativeUtf8());
     var str = ptr.toDartString();
 
     cstringFree(ptr);
@@ -69,5 +126,61 @@ abstract class SideossdkPlatform extends PlatformInterface {
     cstringFree(ptr);
 
     return str;
+  }
+
+  String cryptDataExt(String key, String data) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>(
+            'rust_CryptDataExt')
+        .asFunction();
+    var ptr = result(key.toNativeUtf8(), data.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String decryptDataExt(String key, String data) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>(
+            'rust_DeryptDataExt')
+        .asFunction();
+    var ptr = result(key.toNativeUtf8(), data.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String deriveSharedKey(String prKey, String puKey) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>(
+            'rust_DeriveSharedKey')
+        .asFunction();
+    var ptr = result(prKey.toNativeUtf8(), puKey.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String getVerifiableCredentials() {
+    final SharedStringFunction result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunction>>(
+            'rust_getVerifiableCredentials')
+        .asFunction();
+    var ptr = result(_path.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  Future<String?> initialize() {
+    return _instance.initialize();
   }
 }

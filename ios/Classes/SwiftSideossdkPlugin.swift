@@ -53,6 +53,24 @@ public class SwiftSideossdkPlugin: NSObject, FlutterPlugin {
   }
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
-    result("iOS " + UIDevice.current.systemVersion)
-  }
+      switch (call.method) {
+        case "initSDK":
+            result(getSavedKey())
+            break;
+        case "saveKeys":
+          guard let args = call.arguments else {
+              return
+          }
+          if let myArgs = args as? [String: Any],
+             let keys = myArgs["keys"] as? String {
+             let data = UnsafeMutablePointer(mutating: (keys as NSString).utf8String!)
+
+              saveKeys(keys:data);
+              result(keys);
+          }
+        break;
+        default:
+              result(FlutterMethodNotImplemented)
+        }
+    }
 }

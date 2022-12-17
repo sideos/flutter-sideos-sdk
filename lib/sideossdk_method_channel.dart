@@ -10,8 +10,15 @@ class MethodChannelSideossdk extends SideossdkPlatform {
   final methodChannel = const MethodChannel('sideossdk');
 
   @override
-  Future<String?> getPlatformVersion() async {
-    final version = await methodChannel.invokeMethod<String>('getPlatformVersion');
+  Future<String?> initialize() async {
+    final version = await methodChannel.invokeMethod<String>('initSDK');
+    if (version == "") {
+      var keys = createLocalDid("V003");
+      return await methodChannel
+          .invokeMethod<String>('saveKeys', {"keys": keys});
+    } else {
+      setKeys(version!);
+    }
     return version;
   }
 }
