@@ -33,8 +33,7 @@ class _MyAppState extends State<MyApp> {
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      var value = sideossdkPlugin.signVC(
-          "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}");
+      var value = sideossdkPlugin.signVC("{}");
       var r = SideosResponse.fromJsonString(value);
       if (r.error) {
         print("Error...");

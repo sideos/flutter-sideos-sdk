@@ -17,8 +17,8 @@ class Sideossdk {
     return SideossdkPlatform.instance.getSharedKeyPair();
   }
 
-  String getLocalDid(String version) {
-    return SideossdkPlatform.instance.getLocalDid(version);
+  String getLocalDid() {
+    return SideossdkPlatform.instance.getLocalDid();
   }
 
   String signVC(String vc) {

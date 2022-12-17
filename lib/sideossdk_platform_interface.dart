@@ -58,11 +58,11 @@ abstract class SideossdkPlatform extends PlatformInterface {
     return _instance.initialize();
   }
 
-  String getLocalDid(String version) {
-    final SharedStringFunctionDart result = nativeAddLib
-        .lookup<NativeFunction<SharedStringFunction>>('get_local_did')
+  String getLocalDid() {
+    final SharedKeypairFunction result = nativeAddLib
+        .lookup<NativeFunction<SharedKeypairFunction>>('get_local_did')
         .asFunction();
-    var ptr = result(version.toNativeUtf8());
+    var ptr = result();
     var str = ptr.toDartString();
 
     cstringFree(ptr);
