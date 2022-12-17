@@ -1,9 +1,15 @@
 import 'sideossdk_platform_interface.dart';
 
 class Sideossdk {
-  Future<String?> initSDK() async {
-    return await SideossdkPlatform.instance.initSDK();
+  static Future<Sideossdk> create() async {
+    var component = Sideossdk._create();
+
+    await SideossdkPlatform.instance.initSDK();
+
+    return component;
   }
+
+  Sideossdk._create();
 
   String getSharedKeyPair() {
     return SideossdkPlatform.instance.getSharedKeyPair();
@@ -35,5 +41,36 @@ class Sideossdk {
 
   String getVerifiableCredentials() {
     return SideossdkPlatform.instance.getVerifiableCredentials();
+  }
+
+  String saveVerifiableCredential(String vc, String type) {
+    return SideossdkPlatform.instance.saveVerifiableCredential(vc, type);
+  }
+
+  String deleteVerifiableCredential(String vc) {
+    return SideossdkPlatform.instance.deleteVerifiableCredential(vc);
+  }
+
+  String respondToServer(String url, String payload) {
+    return SideossdkPlatform.instance.respondToServer(url, payload);
+  }
+
+  String parseVC(String vc) {
+    return SideossdkPlatform.instance.parseVC(vc);
+  }
+
+  String signAcceptanceJWT(
+      String jwt, String destinationDID, String challenge) {
+    return SideossdkPlatform.instance
+        .signAcceptanceJWT(jwt, destinationDID, challenge);
+  }
+
+  String signSharedJWT(String jwt, String destinationDID, String challenge) {
+    return SideossdkPlatform.instance
+        .signSharedJWT(jwt, destinationDID, challenge);
+  }
+
+  String parseJWT(String jwt) {
+    return SideossdkPlatform.instance.parseJWT(jwt);
   }
 }

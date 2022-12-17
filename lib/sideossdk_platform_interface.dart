@@ -17,6 +17,8 @@ typedef SharedStringFunction = Pointer<Utf8> Function(Pointer<Utf8>);
 typedef SharedStringFunctionDart = Pointer<Utf8> Function(Pointer<Utf8>);
 typedef SharedStringStringFunctionDart = Pointer<Utf8> Function(
     Pointer<Utf8>, Pointer<Utf8>);
+typedef SharedStringStringStringFunctionDart = Pointer<Utf8> Function(
+    Pointer<Utf8>, Pointer<Utf8>, Pointer<Utf8>);
 typedef CStringFree = void Function(Pointer<Utf8>);
 typedef CStringFreeFFI = Void Function(Pointer<Utf8>);
 
@@ -173,6 +175,99 @@ abstract class SideossdkPlatform extends PlatformInterface {
             'rust_getVerifiableCredentials')
         .asFunction();
     var ptr = result(_path.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String saveVerifiableCredential(String vc, String type) {
+    final SharedStringStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringStringFunctionDart>>(
+            'rust_saveVerifiableCredential')
+        .asFunction();
+    var ptr =
+        result(vc.toNativeUtf8(), type.toNativeUtf8(), _path.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String deleteVerifiableCredential(String vc) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>(
+            'rust_deleteVerifiableCredential')
+        .asFunction();
+    var ptr = result(vc.toNativeUtf8(), _path.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String respondToServer(String url, String payload) {
+    final SharedStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringFunctionDart>>(
+            'rust_respondToServer')
+        .asFunction();
+    var ptr = result(url.toNativeUtf8(), payload.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String parseVC(String vc) {
+    final SharedStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunctionDart>>('rust_parseVC')
+        .asFunction();
+    var ptr = result(vc.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String parseJWT(String jwt) {
+    final SharedStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringFunctionDart>>('rust_parseJWT')
+        .asFunction();
+    var ptr = result(jwt.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String signAcceptanceJWT(
+      String jwt, String destinationDID, String challenge) {
+    final SharedStringStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringStringFunctionDart>>(
+            'rust_signAcceptanceJWT')
+        .asFunction();
+    var ptr = result(jwt.toNativeUtf8(), destinationDID.toNativeUtf8(),
+        challenge.toNativeUtf8());
+    var str = ptr.toDartString();
+
+    cstringFree(ptr);
+
+    return str;
+  }
+
+  String signSharedJWT(String jwt, String destinationDID, String challenge) {
+    final SharedStringStringStringFunctionDart result = nativeAddLib
+        .lookup<NativeFunction<SharedStringStringStringFunctionDart>>(
+            'rust_signSharedJWT')
+        .asFunction();
+    var ptr = result(jwt.toNativeUtf8(), destinationDID.toNativeUtf8(),
+        challenge.toNativeUtf8());
     var str = ptr.toDartString();
 
     cstringFree(ptr);

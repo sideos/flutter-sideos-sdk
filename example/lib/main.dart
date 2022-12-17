@@ -17,7 +17,6 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   String _platformVersion = 'Unknown';
-  final _sideossdkPlugin = Sideossdk();
 
   @override
   void initState() {
@@ -27,11 +26,15 @@ class _MyAppState extends State<MyApp> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
+    final sideossdkPlugin = await Sideossdk.create();
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     // We also handle the message potentially returning null.
     try {
-      var p1 = _sideossdkPlugin.initSDK();
+      var value = sideossdkPlugin.signVC(
+          "{\"issuer\":{\"id\":\"did:key:V003:z6MkndMNLuBoqwQM8iZpHBvSQxF5nt9BwW9XvpgwHokRCN7V\"}}");
+      print(value);
+      /*var p1 = _sideossdkPlugin.initSDK();
       p1.then((value) {
         print(value);
         value = _sideossdkPlugin.signVC(
@@ -44,7 +47,7 @@ class _MyAppState extends State<MyApp> {
         value = _sideossdkPlugin.getVerifiableCredentials();
         print(value);
       });
-
+*/
       //platformVersion = _sideossdkPlugin.getSharedKeyPair();
       //platformVersion = _sideossdkPlugin.getKeys();
       platformVersion = 'PP';
