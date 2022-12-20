@@ -60,7 +60,7 @@ abstract class SideossdkPlatform extends PlatformInterface {
 
   String getLocalDid() {
     final SharedKeypairFunction result = nativeAddLib
-        .lookup<NativeFunction<SharedKeypairFunction>>('get_local_did')
+        .lookup<NativeFunction<SharedKeypairFunction>>('rust_getLocalDid')
         .asFunction();
     var ptr = result();
     var str = ptr.toDartString();
@@ -120,7 +120,8 @@ abstract class SideossdkPlatform extends PlatformInterface {
 
   String getSharedKeyPair() {
     final SharedKeypairFunctionDart result = nativeAddLib
-        .lookup<NativeFunction<SharedKeypairFunction>>('create_shared_keypair')
+        .lookup<NativeFunction<SharedKeypairFunction>>(
+            'rust_createSharedKeyPair')
         .asFunction();
     var ptr = result();
     var str = ptr.toDartString();
@@ -146,7 +147,7 @@ abstract class SideossdkPlatform extends PlatformInterface {
   String decryptDataExt(String key, String data) {
     final SharedStringStringFunctionDart result = nativeAddLib
         .lookup<NativeFunction<SharedStringStringFunctionDart>>(
-            'rust_DeryptDataExt')
+            'rust_DecryptDataExt')
         .asFunction();
     var ptr = result(key.toNativeUtf8(), data.toNativeUtf8());
     var str = ptr.toDartString();
